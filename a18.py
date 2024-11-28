@@ -1,26 +1,33 @@
 import pandas as pd
 
 # Load the dataset
-file_path = r"C:\Users\rutuj\OneDrive\Desktop\DSML\House Data.csv"
-df = pd.read_csv(file_path)
+house_data = pd.read_csv(r'Datasets\House Data.csv')
 
-# Display the first few rows to understand the structure of the data
-print("Dataset Preview:")
-print(df.head())
-
-# Define categorical and quantitative variables
-# Replace 'Age_Group' and 'Income' with actual column names from your dataset
-categorical_variable = 'Age_Group'  # Example categorical variable
-quantitative_variable = 'Income'  # Example quantitative variable
-
-# Ensure the columns exist in the dataset
-if categorical_variable in df.columns and quantitative_variable in df.columns:
-    # Group by the categorical variable and calculate summary statistics
-    grouped_stats = df.groupby(categorical_variable)[quantitative_variable].agg(['mean', 'median', 'min', 'max', 'std'])
-
-    print(f"\nSummary statistics of {quantitative_variable} grouped by {categorical_variable}:")
-    print(grouped_stats)
-else:
-    print(f"Error: Column names {categorical_variable} or {quantitative_variable} not found in the dataset.")
+# # Check the columns in the dataset
+# print(house_data.columns)
 
 
+# Remove currency symbols, commas, and other non-numeric characters from the 'price' column
+house_data['price'] = house_data['price'].replace({r'[^\d.]': ''}, regex=True).astype(float)
+
+# Choose categorical and quantitative columns
+categorical_column = 'district'   # You can replace with another categorical column
+quantitative_column = 'price'    # You can replace with another quantitative column
+
+# Group the data by the categorical column and get summary statistics for the quantitative column
+summary_stats = house_data.groupby(categorical_column)[quantitative_column].describe()
+
+# To include specific summary statistics like mean, median, min, max, and standard deviation:
+mean = house_data.groupby(categorical_column)[quantitative_column].mean()
+median = house_data.groupby(categorical_column)[quantitative_column].median()
+min_value = house_data.groupby(categorical_column)[quantitative_column].min()
+max_value = house_data.groupby(categorical_column)[quantitative_column].max()
+std_dev = house_data.groupby(categorical_column)[quantitative_column].std()
+
+# Display the summary statistics
+print("Summary Statistics (Mean, Median, Min, Max, Std Dev):\n")
+print("Mean:\n", mean)
+print("\nMedian:\n", median)
+print("\nMinimum Value:\n", min_value)
+print("\nMaximum Value:\n", max_value)
+print("\nStandard Deviation:\n", std_dev)
