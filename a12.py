@@ -1,38 +1,33 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Load the dataset
-file_path = r"C:\Users\91830\Downloads\IRIS (1).csv"  # Uploaded file path
-df = pd.read_csv(file_path)
+data = pd.read_csv('/content/IRIS.csv')
 
-# Display the dataset
-print("Dataset Head:")
-print(df.head())
+print(data.head())
 
-# 1. Create box plots for each feature
-print("\nCreating box plots for each feature...")
-for column in df.columns[:-1]:  # Exclude the target column (e.g., Species)
-    plt.figure(figsize=(8, 6))
-    plt.boxplot(df[column], patch_artist=True, notch=True, boxprops=dict(facecolor='skyblue', color='black'))
-    plt.title(f'Box Plot of {column}')
-    plt.xlabel(column)
-    plt.ylabel('Values')
-    plt.grid(axis='y')
-    plt.show()
+for col in data.columns[:-1]:
+  plt.figure(figsize = (8,6))
+  plt.boxplot(data[col], patch_artist = True, notch = True, boxprops = dict(facecolor = 'pink', color = 'red'))
+  plt.ylabel('Values')
+  plt.xlabel(col)
+  plt.title(f'Box Plot of {col}')
+  plt.show()
 
-# 2. Identify outliers
-print("\nOutlier Analysis:")
-for column in df.columns[:-1]:  # Exclude the target column
-    Q1 = df[column].quantile(0.25)  # First quartile
-    Q3 = df[column].quantile(0.75)  # Third quartile
-    IQR = Q3 - Q1  # Interquartile range
-    lower_bound = Q1 - 1.5 * IQR
-    upper_bound = Q3 + 1.5 * IQR
-    
-    outliers = df[(df[column] < lower_bound) | (df[column] > upper_bound)]
-    print(f"{column}:")
-    print(f" - Lower Bound: {lower_bound}, Upper Bound: {upper_bound}")
-    print(f" - Number of Outliers: {len(outliers)}")
-    if len(outliers) > 0:
-        print(f" - Outlier Values:\n{outliers[column].values}")
-    print()
+print('Outliers')  
+for col in data.columns[:-1]:
+  Q1 = data[col].quantile(0.25)
+  Q3 = data[col].quantile(0.75)
+
+  IQR = Q3 - Q1
+
+  lower_bound = Q1 - 1.5 * IQR
+  upper_bound = Q3 + 1.5 * IQR
+
+  outliers = data[(data[col] < lower_bound)| (data[col] > upper_bound)]
+  print(f"Outliers in {col}:")
+  if len(outliers) > 0:  
+    print(len(outliers))  
+    print(outliers[col].values)
+  else:
+    print('0')   
+
